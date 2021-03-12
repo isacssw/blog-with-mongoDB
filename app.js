@@ -21,6 +21,16 @@ app.use(express.static("public"));
 
 let posts = [];
 
+const postSchema = {
+
+  title: String,
+ 
+  content: String
+ 
+ };
+
+ const Post = mongoose.model("Post", postSchema);
+
 app.get("/", function(req, res){
   res.render("home", {
     startingContent: homeStartingContent,
@@ -41,10 +51,15 @@ app.get("/compose", function(req, res){
 });
 
 app.post("/compose", function(req, res){
-  const post = {
+  const post = new Post ({
+
     title: req.body.postTitle,
+ 
     content: req.body.postBody
-  };
+ 
+  });
+
+  post.save();
 
   posts.push(post);
 
@@ -68,6 +83,6 @@ app.get("/posts/:postName", function(req, res){
 
 });
 
-app.listen(3000, function() {
+app.listen(3333, function() {
   console.log("Server started on port 3000");
 });
